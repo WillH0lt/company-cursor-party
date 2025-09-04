@@ -202,7 +202,5 @@ function hashUrl(): string {
     hash = ((hash << 3) + hash + i) & 0x7fffffff;
   }
 
-  console.log(`Hashed URL: ${input} -> ${result}`);
-
   return result;
 }
