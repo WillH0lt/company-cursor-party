@@ -15,6 +15,7 @@ interface CursorData {
   id: string;
   lastSeen: number;
   pc: PerfectCursor;
+  url: string;
 }
 
 const cursors: Map<string, CursorData> = new Map();
@@ -58,6 +59,7 @@ const sendPositionUpdate = throttle((pageX: number, pageY: number) => {
   const position = models.InputPosition.fromObject({
     x: pageX / container.offsetWidth,
     y: pageY / container.offsetHeight,
+    url: window.location.href,
   });
 
   const bytes = position.serializeBinary();
@@ -72,15 +74,19 @@ socket.on("move", (bytes: Uint8Array<ArrayBufferLike>) => {
   if (!cursorData) {
     cursorData = {
       id: position.id,
-      lastSeen: performance.now(),
+      lastSeen: 0,
+      url: "",
       pc: new PerfectCursor((point: number[]) => {
-        createOrUpdateCursor(position.id, point[0], point[1]);
+        const cursorData = cursors.get(position.id);
+        if (!cursorData) return;
+        createOrUpdateCursor(cursorData, point[0], point[1]);
       }),
     };
 
     cursors.set(position.id, cursorData);
   }
 
+  cursorData.url = position.url;
   cursorData.lastSeen = performance.now();
   cursorData.pc.addPoint([
     position.x * container.offsetWidth,
@@ -103,11 +109,11 @@ setInterval(() => {
   });
 }, 1000);
 
-function createOrUpdateCursor(id: string, x: number, y: number) {
-  let cursorElement = document.getElementById(id);
+function createOrUpdateCursor(cursorData: CursorData, x: number, y: number) {
+  let cursorElement = document.getElementById(cursorData.id);
   if (!cursorElement) {
     cursorElement = document.createElement("div");
-    cursorElement.id = id;
+    cursorElement.id = cursorData.id;
     cursorElement.innerHTML = cursorSvg;
     cursorElement.style.position = "absolute";
     cursorElement.style.pointerEvents = "none";
@@ -115,6 +121,12 @@ function createOrUpdateCursor(id: string, x: number, y: number) {
   }
 
   cursorElement.style.setProperty("transform", `translate(${x}px, ${y}px)`);
+
+  if (cursorData.url === window.location.href) {
+    cursorElement.style.visibility = "visible";
+  } else {
+    cursorElement.style.visibility = "hidden";
+  }
 }
 
 function destroyCursor(id: string) {

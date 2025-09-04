@@ -10,6 +10,7 @@ export namespace models {
         constructor(data?: any[] | {
             x?: number;
             y?: number;
+            url?: string;
         }) {
             super();
             pb_1.Message.initialize(this, Array.isArray(data) ? data : [], 0, -1, [], this.#one_of_decls);
@@ -19,6 +20,9 @@ export namespace models {
                 }
                 if ("y" in data && data.y != undefined) {
                     this.y = data.y;
+                }
+                if ("url" in data && data.url != undefined) {
+                    this.url = data.url;
                 }
             }
         }
@@ -34,9 +38,16 @@ export namespace models {
         set y(value: number) {
             pb_1.Message.setField(this, 2, value);
         }
+        get url() {
+            return pb_1.Message.getFieldWithDefault(this, 3, "") as string;
+        }
+        set url(value: string) {
+            pb_1.Message.setField(this, 3, value);
+        }
         static fromObject(data: {
             x?: number;
             y?: number;
+            url?: string;
         }): InputPosition {
             const message = new InputPosition({});
             if (data.x != null) {
@@ -45,18 +56,25 @@ export namespace models {
             if (data.y != null) {
                 message.y = data.y;
             }
+            if (data.url != null) {
+                message.url = data.url;
+            }
             return message;
         }
         toObject() {
             const data: {
                 x?: number;
                 y?: number;
+                url?: string;
             } = {};
             if (this.x != null) {
                 data.x = this.x;
             }
             if (this.y != null) {
                 data.y = this.y;
+            }
+            if (this.url != null) {
+                data.url = this.url;
             }
             return data;
         }
@@ -68,6 +86,8 @@ export namespace models {
                 writer.writeFloat(1, this.x);
             if (this.y != 0)
                 writer.writeFloat(2, this.y);
+            if (this.url.length)
+                writer.writeString(3, this.url);
             if (!w)
                 return writer.getResultBuffer();
         }
@@ -82,6 +102,9 @@ export namespace models {
                         break;
                     case 2:
                         message.y = reader.readFloat();
+                        break;
+                    case 3:
+                        message.url = reader.readString();
                         break;
                     default: reader.skipField();
                 }
@@ -101,6 +124,7 @@ export namespace models {
             id?: string;
             x?: number;
             y?: number;
+            url?: string;
         }) {
             super();
             pb_1.Message.initialize(this, Array.isArray(data) ? data : [], 0, -1, [], this.#one_of_decls);
@@ -113,6 +137,9 @@ export namespace models {
                 }
                 if ("y" in data && data.y != undefined) {
                     this.y = data.y;
+                }
+                if ("url" in data && data.url != undefined) {
+                    this.url = data.url;
                 }
             }
         }
@@ -134,10 +161,17 @@ export namespace models {
         set y(value: number) {
             pb_1.Message.setField(this, 3, value);
         }
+        get url() {
+            return pb_1.Message.getFieldWithDefault(this, 4, "") as string;
+        }
+        set url(value: string) {
+            pb_1.Message.setField(this, 4, value);
+        }
         static fromObject(data: {
             id?: string;
             x?: number;
             y?: number;
+            url?: string;
         }): Position {
             const message = new Position({});
             if (data.id != null) {
@@ -149,6 +183,9 @@ export namespace models {
             if (data.y != null) {
                 message.y = data.y;
             }
+            if (data.url != null) {
+                message.url = data.url;
+            }
             return message;
         }
         toObject() {
@@ -156,6 +193,7 @@ export namespace models {
                 id?: string;
                 x?: number;
                 y?: number;
+                url?: string;
             } = {};
             if (this.id != null) {
                 data.id = this.id;
@@ -165,6 +203,9 @@ export namespace models {
             }
             if (this.y != null) {
                 data.y = this.y;
+            }
+            if (this.url != null) {
+                data.url = this.url;
             }
             return data;
         }
@@ -178,6 +219,8 @@ export namespace models {
                 writer.writeFloat(2, this.x);
             if (this.y != 0)
                 writer.writeFloat(3, this.y);
+            if (this.url.length)
+                writer.writeString(4, this.url);
             if (!w)
                 return writer.getResultBuffer();
         }
@@ -195,6 +238,9 @@ export namespace models {
                         break;
                     case 3:
                         message.y = reader.readFloat();
+                        break;
+                    case 4:
+                        message.url = reader.readString();
                         break;
                     default: reader.skipField();
                 }
