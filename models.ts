@@ -10,7 +10,7 @@ export namespace models {
         constructor(data?: any[] | {
             x?: number;
             y?: number;
-            url?: string;
+            room?: string;
         }) {
             super();
             pb_1.Message.initialize(this, Array.isArray(data) ? data : [], 0, -1, [], this.#one_of_decls);
@@ -21,8 +21,8 @@ export namespace models {
                 if ("y" in data && data.y != undefined) {
                     this.y = data.y;
                 }
-                if ("url" in data && data.url != undefined) {
-                    this.url = data.url;
+                if ("room" in data && data.room != undefined) {
+                    this.room = data.room;
                 }
             }
         }
@@ -38,16 +38,16 @@ export namespace models {
         set y(value: number) {
             pb_1.Message.setField(this, 2, value);
         }
-        get url() {
+        get room() {
             return pb_1.Message.getFieldWithDefault(this, 3, "") as string;
         }
-        set url(value: string) {
+        set room(value: string) {
             pb_1.Message.setField(this, 3, value);
         }
         static fromObject(data: {
             x?: number;
             y?: number;
-            url?: string;
+            room?: string;
         }): InputPosition {
             const message = new InputPosition({});
             if (data.x != null) {
@@ -56,8 +56,8 @@ export namespace models {
             if (data.y != null) {
                 message.y = data.y;
             }
-            if (data.url != null) {
-                message.url = data.url;
+            if (data.room != null) {
+                message.room = data.room;
             }
             return message;
         }
@@ -65,7 +65,7 @@ export namespace models {
             const data: {
                 x?: number;
                 y?: number;
-                url?: string;
+                room?: string;
             } = {};
             if (this.x != null) {
                 data.x = this.x;
@@ -73,8 +73,8 @@ export namespace models {
             if (this.y != null) {
                 data.y = this.y;
             }
-            if (this.url != null) {
-                data.url = this.url;
+            if (this.room != null) {
+                data.room = this.room;
             }
             return data;
         }
@@ -86,8 +86,8 @@ export namespace models {
                 writer.writeFloat(1, this.x);
             if (this.y != 0)
                 writer.writeFloat(2, this.y);
-            if (this.url.length)
-                writer.writeString(3, this.url);
+            if (this.room.length)
+                writer.writeString(3, this.room);
             if (!w)
                 return writer.getResultBuffer();
         }
@@ -104,7 +104,7 @@ export namespace models {
                         message.y = reader.readFloat();
                         break;
                     case 3:
-                        message.url = reader.readString();
+                        message.room = reader.readString();
                         break;
                     default: reader.skipField();
                 }
@@ -124,7 +124,7 @@ export namespace models {
             id?: string;
             x?: number;
             y?: number;
-            url?: string;
+            room?: string;
         }) {
             super();
             pb_1.Message.initialize(this, Array.isArray(data) ? data : [], 0, -1, [], this.#one_of_decls);
@@ -138,8 +138,8 @@ export namespace models {
                 if ("y" in data && data.y != undefined) {
                     this.y = data.y;
                 }
-                if ("url" in data && data.url != undefined) {
-                    this.url = data.url;
+                if ("room" in data && data.room != undefined) {
+                    this.room = data.room;
                 }
             }
         }
@@ -161,17 +161,17 @@ export namespace models {
         set y(value: number) {
             pb_1.Message.setField(this, 3, value);
         }
-        get url() {
+        get room() {
             return pb_1.Message.getFieldWithDefault(this, 4, "") as string;
         }
-        set url(value: string) {
+        set room(value: string) {
             pb_1.Message.setField(this, 4, value);
         }
         static fromObject(data: {
             id?: string;
             x?: number;
             y?: number;
-            url?: string;
+            room?: string;
         }): Position {
             const message = new Position({});
             if (data.id != null) {
@@ -183,8 +183,8 @@ export namespace models {
             if (data.y != null) {
                 message.y = data.y;
             }
-            if (data.url != null) {
-                message.url = data.url;
+            if (data.room != null) {
+                message.room = data.room;
             }
             return message;
         }
@@ -193,7 +193,7 @@ export namespace models {
                 id?: string;
                 x?: number;
                 y?: number;
-                url?: string;
+                room?: string;
             } = {};
             if (this.id != null) {
                 data.id = this.id;
@@ -204,8 +204,8 @@ export namespace models {
             if (this.y != null) {
                 data.y = this.y;
             }
-            if (this.url != null) {
-                data.url = this.url;
+            if (this.room != null) {
+                data.room = this.room;
             }
             return data;
         }
@@ -219,8 +219,8 @@ export namespace models {
                 writer.writeFloat(2, this.x);
             if (this.y != 0)
                 writer.writeFloat(3, this.y);
-            if (this.url.length)
-                writer.writeString(4, this.url);
+            if (this.room.length)
+                writer.writeString(4, this.room);
             if (!w)
                 return writer.getResultBuffer();
         }
@@ -240,7 +240,7 @@ export namespace models {
                         message.y = reader.readFloat();
                         break;
                     case 4:
-                        message.url = reader.readString();
+                        message.room = reader.readString();
                         break;
                     default: reader.skipField();
                 }

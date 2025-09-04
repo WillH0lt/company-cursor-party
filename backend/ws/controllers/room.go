@@ -51,10 +51,10 @@ func handleEventMove(client *socketio.Socket, data any) error {
 	}
 
 	position := &models.Position{
-		Id:  string(client.Id()),
-		X:   inputPosition.X,
-		Y:   inputPosition.Y,
-		Url: inputPosition.Url,
+		Id:   string(client.Id()),
+		X:    inputPosition.X,
+		Y:    inputPosition.Y,
+		Room: inputPosition.Room,
 	}
 
 	bytes, err := proto.Marshal(position)

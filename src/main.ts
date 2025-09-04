@@ -15,7 +15,7 @@ interface CursorData {
   id: string;
   lastSeen: number;
   pc: PerfectCursor;
-  url: string;
+  room: string;
 }
 
 if (import.meta.env.DEV) {
@@ -88,7 +88,7 @@ const sendPositionUpdate = throttle((pageX: number, pageY: number) => {
   const position = models.InputPosition.fromObject({
     x: pageX / container.offsetWidth,
     y: pageY / container.offsetHeight,
-    url: window.location.href,
+    room: hashUrl(),
   });
 
   const bytes = position.serializeBinary();
@@ -104,7 +104,7 @@ socket.on("move", (bytes: Uint8Array<ArrayBufferLike>) => {
     cursorData = {
       id: position.id,
       lastSeen: 0,
-      url: "",
+      room: "",
       pc: new PerfectCursor((point: number[]) => {
         const cursorData = cursors.get(position.id);
         if (!cursorData) return;
@@ -115,7 +115,7 @@ socket.on("move", (bytes: Uint8Array<ArrayBufferLike>) => {
     cursors.set(position.id, cursorData);
   }
 
-  cursorData.url = position.url;
+  cursorData.room = position.room;
   cursorData.lastSeen = performance.now();
   cursorData.pc.addPoint([
     position.x * container.offsetWidth,
@@ -151,7 +151,7 @@ function createOrUpdateCursor(cursorData: CursorData, x: number, y: number) {
 
   cursorElement.style.setProperty("transform", `translate(${x}px, ${y}px)`);
 
-  if (cursorData.url === window.location.href) {
+  if (cursorData.room === hashUrl()) {
     cursorElement.style.visibility = "visible";
   } else {
     cursorElement.style.visibility = "hidden";
@@ -170,4 +170,39 @@ function destroyCursor(id: string) {
   }
 
   cursors.delete(id);
+}
+
+function hashUrl(): string {
+  const input = window.location.href.split("?")[0];
+
+  // hash function using djb2 algorithm
+  let hash = 5381;
+  for (let i = 0; i < input.length; i++) {
+    hash = (hash << 5) + hash + input.charCodeAt(i);
+    hash = hash & hash; // Convert to 32-bit integer
+  }
+
+  // Convert to positive number and create base string
+  hash = Math.abs(hash);
+  let result = "";
+
+  // Character set for output (alphanumeric)
+  const chars =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+  // Generate the hash string of desired length
+  const outputLength = 10;
+  for (let i = 0; i < outputLength; i++) {
+    // Use the hash and position to generate pseudo-random indices
+    const seed = hash + i * 7919; // 7919 is a prime number for better distribution
+    const index = seed % chars.length;
+    result += chars[index];
+
+    // Update hash for next iteration to avoid repetition
+    hash = ((hash << 3) + hash + i) & 0x7fffffff;
+  }
+
+  console.log(`Hashed URL: ${input} -> ${result}`);
+
+  return result;
 }

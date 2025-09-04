@@ -25,7 +25,7 @@ type InputPosition struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	X             float32                `protobuf:"fixed32,1,opt,name=x,proto3" json:"x,omitempty"`
 	Y             float32                `protobuf:"fixed32,2,opt,name=y,proto3" json:"y,omitempty"`
-	Url           string                 `protobuf:"bytes,3,opt,name=url,proto3" json:"url,omitempty"`
+	Room          string                 `protobuf:"bytes,3,opt,name=room,proto3" json:"room,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -74,9 +74,9 @@ func (x *InputPosition) GetY() float32 {
 	return 0
 }
 
-func (x *InputPosition) GetUrl() string {
+func (x *InputPosition) GetRoom() string {
 	if x != nil {
-		return x.Url
+		return x.Room
 	}
 	return ""
 }
@@ -86,7 +86,7 @@ type Position struct {
 	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
 	X             float32                `protobuf:"fixed32,2,opt,name=x,proto3" json:"x,omitempty"`
 	Y             float32                `protobuf:"fixed32,3,opt,name=y,proto3" json:"y,omitempty"`
-	Url           string                 `protobuf:"bytes,4,opt,name=url,proto3" json:"url,omitempty"`
+	Room          string                 `protobuf:"bytes,4,opt,name=room,proto3" json:"room,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -142,9 +142,9 @@ func (x *Position) GetY() float32 {
 	return 0
 }
 
-func (x *Position) GetUrl() string {
+func (x *Position) GetRoom() string {
 	if x != nil {
-		return x.Url
+		return x.Room
 	}
 	return ""
 }
@@ -153,16 +153,16 @@ var File_models_proto protoreflect.FileDescriptor
 
 const file_models_proto_rawDesc = "" +
 	"\n" +
-	"\fmodels.proto\x12\x06models\"=\n" +
+	"\fmodels.proto\x12\x06models\"?\n" +
 	"\rInputPosition\x12\f\n" +
 	"\x01x\x18\x01 \x01(\x02R\x01x\x12\f\n" +
-	"\x01y\x18\x02 \x01(\x02R\x01y\x12\x10\n" +
-	"\x03url\x18\x03 \x01(\tR\x03url\"H\n" +
+	"\x01y\x18\x02 \x01(\x02R\x01y\x12\x12\n" +
+	"\x04room\x18\x03 \x01(\tR\x04room\"J\n" +
 	"\bPosition\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\f\n" +
 	"\x01x\x18\x02 \x01(\x02R\x01x\x12\f\n" +
-	"\x01y\x18\x03 \x01(\x02R\x01y\x12\x10\n" +
-	"\x03url\x18\x04 \x01(\tR\x03urlB@Z>github.com/willH0lt/company-cursor-party/backend/shared/modelsb\x06proto3"
+	"\x01y\x18\x03 \x01(\x02R\x01y\x12\x12\n" +
+	"\x04room\x18\x04 \x01(\tR\x04roomB@Z>github.com/willH0lt/company-cursor-party/backend/shared/modelsb\x06proto3"
 
 var (
 	file_models_proto_rawDescOnce sync.Once
