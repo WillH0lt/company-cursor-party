@@ -1,0 +1,11 @@
+syntax = "proto3";
+package models;
+
+option go_package = "github.com/willH0lt/company-cursor-party/backend/shared/models";
+
+
+message Position {
+  sint64 x = 1;
+  sint64 y = 2;
+  string id = 3;
+}

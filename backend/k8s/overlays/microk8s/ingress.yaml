@@ -1,0 +1,24 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: company-cursor-party-ws-ingress
+  namespace: company-cursor-party
+  annotations:
+    kubernetes.io/ingress.class: public
+    cert-manager.io/cluster-issuer: lets-encrypt
+spec:
+  tls:
+    - hosts:
+        - thecompany.pixel.land
+      secretName: company-cursor-party-ws-ingress-tls
+  rules:
+    - host: thecompany.pixel.land
+      http:
+        paths:
+          - backend:
+              service:
+                name: company-cursor-party-ws
+                port:
+                  number: 80
+            path: /
+            pathType: ImplementationSpecific

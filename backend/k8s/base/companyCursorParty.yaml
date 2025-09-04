@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: company-cursor-party-ws
+  namespace: company-cursor-party
+spec:
+  selector:
+    matchLabels:
+      app: company-cursor-party-ws
+  template:
+    metadata:
+      labels:
+        app: company-cursor-party-ws
+    spec:
+      containers:
+        - name: company-cursor-party-ws
+          image: gcr.io/company-cursor-party/ws
+          ports:
+            - containerPort: 8087
+          env:
+            - name: WS_PORT
+              value: "8087"
+            - name: WS_DEBUG
+              value: "true"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: company-cursor-party-ws
+  namespace: company-cursor-party
+spec:
+  type: LoadBalancer
+  selector:
+    app: company-cursor-party-ws
+  ports:
+    - protocol: TCP
+      port: 8087
+      targetPort: 8087

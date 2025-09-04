@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: company-cursor-party-ws
+  namespace: company-cursor-party
+spec:
+  template:
+    spec:
+      containers:
+        - name: company-cursor-party-ws
+          image: localhost:32000/company-cursor-party-ws
+          env:
+            - name: WS_DEBUG
+              value: "false"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: company-cursor-party-ws
+  namespace: company-cursor-party
+spec:
+  type: ClusterIP
+  selector:
+    app: company-cursor-party-ws
+  ports:
+    - protocol: TCP
+      port: 8087
+      targetPort: 8087
+      $patch: delete
+    - protocol: TCP
+      port: 80
+      targetPort: 8087
