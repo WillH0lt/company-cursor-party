@@ -1,7 +1,7 @@
 apiVersion: skaffold/v3
 kind: Config
 metadata:
-  name: crayontown
+  name: company-cursor-party
 build:
   artifacts:
     - image: gcr.io/company-cursor-party/ws
@@ -14,16 +14,7 @@ manifests:
 deploy:
   kubeContext: minikube
   kubectl:
-    defaultNamespace: crayontown
-  helm:
-    releases:
-      - name: redis
-        remoteChart: oci://registry-1.docker.io/bitnamicharts/redis
-        namespace: crayontown
-        createNamespace: true
-        setValues:
-          architecture: standalone
-          auth.enabled: false
+    defaultNamespace: company-cursor-party
 profiles:
   - name: microk8s
     deploy:
@@ -34,10 +25,7 @@ profiles:
     patches:
       - op: replace
         path: /build/artifacts/0/image
-        value: localhost:32000/crayontown-ws
-      - op: replace
-        path: /build/artifacts/1/image
-        value: localhost:32000/crayontown-cleaner
+        value: localhost:32000/company-cursor-party-ws
       - op: replace
         path: /manifests/kustomize/paths
         value:
@@ -50,11 +38,5 @@ profiles:
 # use microk8s context
 # kubectl config use-context microk8s
 
-# Minikube create service account secret
-# kubectl create secret generic crayontown-service-account --from-file=./service-account.json --namespace crayontown
-
 # deploy
 # skaffold run -p microk8s
-
-# Run cron job manually
-# kubectl create job --from=cronjob/crayontown-cleaner crayontown-cleaner-000 --namespace crayontown
