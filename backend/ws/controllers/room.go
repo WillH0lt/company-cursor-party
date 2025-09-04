@@ -1,11 +1,11 @@
 package controllers
 
 import (
-	"encoding/base64"
 	"fmt"
 
 	"github.com/willH0lt/company-cursor-party/backend/shared/models"
 	"github.com/willH0lt/company-cursor-party/backend/ws/socket"
+	"github.com/zishang520/engine.io-go-parser/types"
 	socketio "github.com/zishang520/socket.io/v2/socket"
 	"google.golang.org/protobuf/proto"
 )
@@ -26,10 +26,10 @@ func (r RoomController) Join(clients ...any) {
 	client := clients[0].(*socketio.Socket)
 	client.Join(RoomName)
 
-	io.To(RoomName).Emit(EventJoin, r.nClients())
+	io.To(RoomName).Emit(EventJoin)
 
 	client.On("disconnect", func(...any) {
-		io.To(RoomName).Emit(EventLeave, r.nClients())
+		io.To(RoomName).Emit(EventLeave, client.Id())
 	})
 
 	client.On(EventMove, func(datas ...any) {
@@ -40,38 +40,30 @@ func (r RoomController) Join(clients ...any) {
 }
 
 func handleEventMove(client *socketio.Socket, data any) error {
-	str, ok := data.(string)
+	buf, ok := data.(types.BufferInterface)
 	if !ok {
-		return fmt.Errorf("data is not a string")
+		return fmt.Errorf("data is not binary")
 	}
 
-	byteData, err := base64.StdEncoding.DecodeString(str)
-	if err != nil {
-		return err
-	}
-
-	var position models.Position
-	if err := proto.Unmarshal(byteData, &position); err != nil {
+	var inputPosition models.InputPosition
+	if err := proto.Unmarshal(buf.Bytes(), &inputPosition); err != nil {
 		return fmt.Errorf("error unmarshalling position: %w", err)
 	}
 
-	if err := client.Broadcast().To(RoomName).Emit(EventMove, data); err != nil {
+	position := &models.Position{
+		Id: string(client.Id()),
+		X:  inputPosition.X,
+		Y:  inputPosition.Y,
+	}
+
+	bytes, err := proto.Marshal(position)
+	if err != nil {
+		return fmt.Errorf("error marshalling position: %w", err)
+	}
+
+	if err := client.Broadcast().To(RoomName).Emit(EventMove, bytes); err != nil {
 		return err
 	}
 
 	return nil
-}
-
-func (r RoomController) nClients() int {
-	io := socket.GetIo()
-
-	room, ok := io.Sockets().Adapter().Rooms().Load(RoomName)
-	var size int
-	if !ok {
-		size = 0
-	} else {
-		size = room.Len()
-	}
-
-	return size
 }

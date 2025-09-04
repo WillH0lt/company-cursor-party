@@ -5,12 +5,11 @@
  * git: https://github.com/thesayyn/protoc-gen-ts */
 import * as pb_1 from "google-protobuf";
 export namespace models {
-    export class Position extends pb_1.Message {
+    export class InputPosition extends pb_1.Message {
         #one_of_decls: number[][] = [];
         constructor(data?: any[] | {
             x?: number;
             y?: number;
-            id?: string;
         }) {
             super();
             pb_1.Message.initialize(this, Array.isArray(data) ? data : [], 0, -1, [], this.#one_of_decls);
@@ -20,9 +19,6 @@ export namespace models {
                 }
                 if ("y" in data && data.y != undefined) {
                     this.y = data.y;
-                }
-                if ("id" in data && data.id != undefined) {
-                    this.id = data.id;
                 }
             }
         }
@@ -38,26 +34,16 @@ export namespace models {
         set y(value: number) {
             pb_1.Message.setField(this, 2, value);
         }
-        get id() {
-            return pb_1.Message.getFieldWithDefault(this, 3, "") as string;
-        }
-        set id(value: string) {
-            pb_1.Message.setField(this, 3, value);
-        }
         static fromObject(data: {
             x?: number;
             y?: number;
-            id?: string;
-        }): Position {
-            const message = new Position({});
+        }): InputPosition {
+            const message = new InputPosition({});
             if (data.x != null) {
                 message.x = data.x;
             }
             if (data.y != null) {
                 message.y = data.y;
-            }
-            if (data.id != null) {
-                message.id = data.id;
             }
             return message;
         }
@@ -65,16 +51,12 @@ export namespace models {
             const data: {
                 x?: number;
                 y?: number;
-                id?: string;
             } = {};
             if (this.x != null) {
                 data.x = this.x;
             }
             if (this.y != null) {
                 data.y = this.y;
-            }
-            if (this.id != null) {
-                data.id = this.id;
             }
             return data;
         }
@@ -83,11 +65,119 @@ export namespace models {
         serialize(w?: pb_1.BinaryWriter): Uint8Array | void {
             const writer = w || new pb_1.BinaryWriter();
             if (this.x != 0)
-                writer.writeSint64(1, this.x);
+                writer.writeFloat(1, this.x);
             if (this.y != 0)
-                writer.writeSint64(2, this.y);
+                writer.writeFloat(2, this.y);
+            if (!w)
+                return writer.getResultBuffer();
+        }
+        static deserialize(bytes: Uint8Array | pb_1.BinaryReader): InputPosition {
+            const reader = bytes instanceof pb_1.BinaryReader ? bytes : new pb_1.BinaryReader(bytes), message = new InputPosition();
+            while (reader.nextField()) {
+                if (reader.isEndGroup())
+                    break;
+                switch (reader.getFieldNumber()) {
+                    case 1:
+                        message.x = reader.readFloat();
+                        break;
+                    case 2:
+                        message.y = reader.readFloat();
+                        break;
+                    default: reader.skipField();
+                }
+            }
+            return message;
+        }
+        serializeBinary(): Uint8Array {
+            return this.serialize();
+        }
+        static deserializeBinary(bytes: Uint8Array): InputPosition {
+            return InputPosition.deserialize(bytes);
+        }
+    }
+    export class Position extends pb_1.Message {
+        #one_of_decls: number[][] = [];
+        constructor(data?: any[] | {
+            id?: string;
+            x?: number;
+            y?: number;
+        }) {
+            super();
+            pb_1.Message.initialize(this, Array.isArray(data) ? data : [], 0, -1, [], this.#one_of_decls);
+            if (!Array.isArray(data) && typeof data == "object") {
+                if ("id" in data && data.id != undefined) {
+                    this.id = data.id;
+                }
+                if ("x" in data && data.x != undefined) {
+                    this.x = data.x;
+                }
+                if ("y" in data && data.y != undefined) {
+                    this.y = data.y;
+                }
+            }
+        }
+        get id() {
+            return pb_1.Message.getFieldWithDefault(this, 1, "") as string;
+        }
+        set id(value: string) {
+            pb_1.Message.setField(this, 1, value);
+        }
+        get x() {
+            return pb_1.Message.getFieldWithDefault(this, 2, 0) as number;
+        }
+        set x(value: number) {
+            pb_1.Message.setField(this, 2, value);
+        }
+        get y() {
+            return pb_1.Message.getFieldWithDefault(this, 3, 0) as number;
+        }
+        set y(value: number) {
+            pb_1.Message.setField(this, 3, value);
+        }
+        static fromObject(data: {
+            id?: string;
+            x?: number;
+            y?: number;
+        }): Position {
+            const message = new Position({});
+            if (data.id != null) {
+                message.id = data.id;
+            }
+            if (data.x != null) {
+                message.x = data.x;
+            }
+            if (data.y != null) {
+                message.y = data.y;
+            }
+            return message;
+        }
+        toObject() {
+            const data: {
+                id?: string;
+                x?: number;
+                y?: number;
+            } = {};
+            if (this.id != null) {
+                data.id = this.id;
+            }
+            if (this.x != null) {
+                data.x = this.x;
+            }
+            if (this.y != null) {
+                data.y = this.y;
+            }
+            return data;
+        }
+        serialize(): Uint8Array;
+        serialize(w: pb_1.BinaryWriter): void;
+        serialize(w?: pb_1.BinaryWriter): Uint8Array | void {
+            const writer = w || new pb_1.BinaryWriter();
             if (this.id.length)
-                writer.writeString(3, this.id);
+                writer.writeString(1, this.id);
+            if (this.x != 0)
+                writer.writeFloat(2, this.x);
+            if (this.y != 0)
+                writer.writeFloat(3, this.y);
             if (!w)
                 return writer.getResultBuffer();
         }
@@ -98,13 +188,13 @@ export namespace models {
                     break;
                 switch (reader.getFieldNumber()) {
                     case 1:
-                        message.x = reader.readSint64();
+                        message.id = reader.readString();
                         break;
                     case 2:
-                        message.y = reader.readSint64();
+                        message.x = reader.readFloat();
                         break;
                     case 3:
-                        message.id = reader.readString();
+                        message.y = reader.readFloat();
                         break;
                     default: reader.skipField();
                 }
