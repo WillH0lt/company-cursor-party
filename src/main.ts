@@ -18,18 +18,47 @@ interface CursorData {
   url: string;
 }
 
+if (import.meta.env.DEV) {
+  const main = document.createElement("div");
+  main.id = "main";
+  main.style.height = "400vh"; // make it scrollable
+  document.body.appendChild(main);
+
+  // add red squares for testing
+  for (let i = 0; i < 50; i++) {
+    const square = document.createElement("div");
+    square.style.position = "absolute";
+    square.style.width = "20px";
+    square.style.height = "20px";
+    square.style.backgroundColor = "red";
+    square.style.left = Math.random() * main.clientWidth + "px";
+    square.style.top = Math.random() * main.clientHeight + "px";
+    main.appendChild(square);
+  }
+}
+
 const cursors: Map<string, CursorData> = new Map();
+
+const mainElement = document.getElementById("main");
+if (!mainElement) throw new Error("No main element found");
 
 // container for all cursor elements
 const container = document.createElement("div");
 container.style.position = "absolute";
 container.style.top = "0";
 container.style.left = "0";
-container.style.width = "100%";
-container.style.height = "100%";
+container.style.width = mainElement.clientWidth - 1 + "px";
+container.style.height = mainElement.clientHeight - 1 + "px";
 container.style.overflow = "hidden";
 container.style.pointerEvents = "none";
 document.body.appendChild(container);
+
+// when mainElement changes size, update container size
+const resizeObserver = new ResizeObserver(() => {
+  container.style.width = mainElement.clientWidth - 1 + "px";
+  container.style.height = mainElement.clientHeight - 1 + "px";
+});
+resizeObserver.observe(mainElement);
 
 // Update my cursor position on mouse move
 window.addEventListener("mousemove", (e: MouseEvent) => {
