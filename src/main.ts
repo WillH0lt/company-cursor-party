@@ -26,13 +26,14 @@ if (import.meta.env.DEV) {
 
   // add red squares for testing
   for (let i = 0; i < 50; i++) {
-    const square = document.createElement("div");
+    const square = document.createElement("a");
     square.style.position = "absolute";
     square.style.width = "20px";
     square.style.height = "20px";
     square.style.backgroundColor = "red";
     square.style.left = Math.random() * main.clientWidth + "px";
     square.style.top = Math.random() * main.clientHeight + "px";
+    square.href = "/" + Math.floor(Math.random() * 5);
     main.appendChild(square);
   }
 }
@@ -137,6 +138,19 @@ setInterval(() => {
     }
   });
 }, 1000);
+
+// Detect URL changes to handle room changes
+let currentUrl = window.location.href;
+setInterval(() => {
+  if (currentUrl !== window.location.href) {
+    currentUrl = window.location.href;
+
+    // hide all cursors when changing rooms
+    container.childNodes.forEach((child) => {
+      (child as HTMLElement).style.visibility = "hidden";
+    });
+  }
+}, 50);
 
 function createOrUpdateCursor(cursorData: CursorData, x: number, y: number) {
   let cursorElement = document.getElementById(cursorData.id);
